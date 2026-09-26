@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ahmed Khaled Abass — Enterprise Systems Integration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F1720;
+    --panel: #141F2B;
+    --line: #223140;
+    --text: #E9EDF1;
+    --text-dim: #8FA0AC;
+    --text-dimmer: #64747F;
+    --accent: #E8A33D;
+    --accent-2: #5FC7C0;
+    --sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: #16110A; }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+  a { color: inherit; }
+
+  /* header */
+  header.site {
+    position: sticky; top: 0;
+    padding-top: calc(18px + env(safe-area-inset-top, 0px));
+    padding-bottom: 18px;
+    background: rgba(15,23,32,.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    z-index: 10;
+  }
+  .site-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .brand { font-weight: 600; font-size: 15px; letter-spacing: .01em; }
+  .brand span { color: var(--text-dim); font-weight: 400; }
+  nav.links { display: flex; gap: 18px; }
+  nav.links a {
+    text-decoration: none; font-size: 14px; color: var(--text-dim);
+    border-bottom: 1px solid transparent; padding-bottom: 2px;
+  }
+  nav.links a:hover { color: var(--text); border-color: var(--accent-2); }
+
+  section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+
+  h2.kicker {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent-2);
+    margin: 0 0 14px 0;
+    font-weight: 500;
+  }
+
+  /* hero */
+  .hero { padding-top: 72px; }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; }
+  .hero h1 {
+    font-size: clamp(30px, 4.2vw, 44px);
+    line-height: 1.2;
+    margin: 0 0 20px 0;
+    font-weight: 600;
+    max-width: 15ch;
+  }
+  .hero .role {
+    font-family: var(--mono);
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+  .hero p.lead {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 50ch;
+    margin: 0 0 28px 0;
+  }
+  .hero-meta { display: flex; gap: 22px; flex-wrap: wrap; font-size: 14px; color: var(--text-dimmer); }
+  .cta-row { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; text-decoration: none;
+    padding: 11px 20px; border-radius: 4px;
+    font-size: 14px; font-weight: 500;
+  }
+  .btn.primary { background: var(--accent); color: #16110A; }
+  .btn.ghost { border: 1px solid var(--line); color: var(--text); }
+  .btn.ghost:hover { border-color: var(--text-dim); }
+
+  svg.diagram { width: 100%; height: auto; overflow: visible; }
+  .node-box { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; }
+  .node-box.center { stroke: var(--accent); }
+  .node-label { fill: var(--text); font-family: var(--mono); font-size: 12px; }
+  .node-label.dim { fill: var(--text-dim); }
+  .flow-line { stroke: var(--accent-2); stroke-width: 1.5; fill: none; opacity: .8; }
+  .flow-line.animated { stroke-dasharray: 6 240; stroke-dashoffset: 240; animation: draw 1.6s ease-out forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .flow-line.animated { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+  }
+
+  /* approach */
+  .approach blockquote {
+    margin: 0; padding: 0; border: none;
+    font-size: clamp(19px, 2.4vw, 24px);
+    line-height: 1.55;
+    max-width: 42ch;
+    color: var(--text);
+  }
+  .approach cite { display: block; margin-top: 18px; font-style: normal; font-family: var(--mono); font-size: 13px; color: var(--text-dimmer); }
+
+  /* capabilities */
+  .cap-row {
+    display: grid; grid-template-columns: 220px 1fr;
+    gap: 20px; padding: 18px 0; border-top: 1px solid var(--line);
+  }
+  .cap-row:last-child { border-bottom: none; }
+  .cap-label { font-family: var(--mono); font-size: 14px; color: var(--accent-2); }
+  .cap-desc { color: var(--text-dim); font-size: 15.5px; }
+
+  /* featured project */
+  .project-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 36px;
+  }
+  .project-card h3 { margin: 0 0 6px 0; font-size: 21px; font-weight: 600; }
+  .project-status { font-family: var(--mono); font-size: 12px; color: var(--accent); margin-bottom: 22px; display: inline-block; }
+  .project-card p { color: var(--text-dim); font-size: 15.5px; max-width: 68ch; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .tag {
+    font-family: var(--mono); font-size: 12px; color: var(--text-dim);
+    border: 1px solid var(--line); border-radius: 4px; padding: 5px 10px;
+  }
+
+  /* experience */
+  .job { display: grid; grid-template-columns: 150px 1fr; gap: 24px; padding: 26px 0; border-top: 1px solid var(--line); }
+  .job:first-child { border-top: none; }
+  .job-date { font-family: var(--mono); font-size: 13px; color: var(--text-dimmer); padding-top: 3px; }
+  .job-title { font-weight: 600; font-size: 17px; margin-bottom: 3px; }
+  .job-org { color: var(--text-dim); font-size: 14.5px; margin-bottom: 14px; }
+  .job ul { margin: 0; padding-left: 18px; color: var(--text-dim); font-size: 15px; }
+  .job li { margin-bottom: 7px; }
+  .job li.highlight { color: var(--text); }
+
+  /* skills */
+  .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 40px; }
+  .skill-group h4 {
+    font-family: var(--mono); font-weight: 500; font-size: 13px;
+    color: var(--accent-2); margin: 0 0 10px 0;
+  }
+  .skill-group p { margin: 0; color: var(--text-dim); font-size: 14.5px; line-height: 1.7; }
+
+  /* certificates */
+  .cert-list { list-style: none; margin: 0; padding: 0; }
+  .cert-list li {
+    padding: 14px 0; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-size: 15px; color: var(--text-dim);
+  }
+  .cert-list li span.source { font-family: var(--mono); font-size: 12.5px; color: var(--text-dimmer); }
+
+  /* footer */
+  footer {
+    padding: 48px 0 calc(48px + env(safe-area-inset-bottom, 0px));
+  }
+  .footer-grid { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
+  .footer-contact { font-size: 15px; color: var(--text-dim); }
+  .footer-contact a { text-decoration: none; }
+  .footer-contact a:hover { color: var(--text); }
+  .footer-links { display: flex; gap: 20px; font-size: 14px; }
+  .footer-links a { text-decoration: none; color: var(--text-dim); }
+  .footer-links a:hover { color: var(--accent-2); }
+  .footer-note { color: var(--text-dimmer); font-size: 13px; margin-top: 28px; }
+
+  @media (max-width: 760px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero { padding-top: 48px; }
+    section { padding: 48px 0; }
+    .cap-row { grid-template-columns: 1fr; gap: 6px; }
+    .job { grid-template-columns: 1fr; gap: 6px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    nav.links { gap: 12px; }
+    nav.links a { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap site-inner">
+    <div class="brand">Ahmed Khaled Abass <span>/ Integration Developer</span></div>
+    <nav class="links">
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="role">Full-Stack Developer — Enterprise Systems Integration</div>
+      <h1>I build the layer that lets separate systems talk to each other.</h1>
+      <p class="lead">REST APIs, third-party integrations, and middleware. My work has always been enterprise-level integration, where the hard part was never the CRUD screens — it was authentication, data mapping, retries, and the errors that only show up in production.</p>
+      <div class="hero-meta">
+        <span>Giza, Egypt</span>
+        <span>.NET Core · Angular · React Native</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn primary" href="mailto:ahmedabasshalby@gmail.com">Get in touch</a>
+        <a class="btn ghost" href="#work">See the work</a>
+      </div>
+    </div>
+    <div>
+      <svg class="diagram" viewBox="0 0 620 360" xmlns="http://www.w3.org/2000/svg">
+        <rect class="node-box" x="10" y="15" width="180" height="52" rx="5"/>
+        <text class="node-label" x="30" y="46">Oracle HR</text>
+        <rect class="node-box" x="10" y="155" width="180" height="52" rx="5"/>
+        <text class="node-label" x="30" y="186">SharePoint</text>
+        <rect class="node-box" x="10" y="295" width="180" height="52" rx="5"/>
+        <text class="node-label dim" x="30" y="314">AI Assistant</text>
+        <text class="node-label dim" x="30" y="332">(Ollama LLM)</text>
+
+        <rect class="node-box center" x="240" y="155" width="170" height="60" rx="5"/>
+        <text class="node-label" x="260" y="183">Integration</text>
+        <text class="node-label" x="260" y="200">Layer</text>
+
+        <rect class="node-box" x="450" y="155" width="160" height="60" rx="5"/>
+        <text class="node-label" x="470" y="183">Employee</text>
+        <text class="node-label" x="470" y="200">App</text>
+
+        <path class="flow-line animated" d="M190,41 C215,41 215,185 240,185" style="animation-delay:.1s"/>
+        <path class="flow-line animated" d="M190,181 C215,181 215,185 240,185" style="animation-delay:.3s"/>
+        <path class="flow-line animated" d="M190,321 C215,321 215,185 240,185" style="animation-delay:.5s"/>
+        <path class="flow-line animated" d="M410,185 L450,185" style="animation-delay:.9s"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="approach">
+  <div class="wrap">
+    <h2 class="kicker">How I work</h2>
+    <blockquote>
+      I do fixed-scope projects with well-defined milestones. If you can't provide requirements detailed enough for estimation, I'll tell you before I start working — not after.
+      <cite>— my approach on every engagement</cite>
+    </blockquote>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 class="kicker">What I do</h2>
+    <div class="cap-row">
+      <div class="cap-label">REST APIs</div>
+      <div class="cap-desc">.NET 8, .NET Core, and .NET Framework</div>
+    </div>
+    <div class="cap-row">
+      <div class="cap-label">Integrations</div>
+      <div class="cap-desc">Third-party APIs — payment gateways, SMS providers, CRM, ERP</div>
+    </div>
+    <div class="cap-row">
+      <div class="cap-label">Migration</div>
+      <div class="cap-desc">Legacy SOAP services moved to RESTful endpoints</div>
+    </div>
+    <div class="cap-row">
+      <div class="cap-label">Data pipelines</div>
+      <div class="cap-desc">Bulk import from Excel / CSV into SQL Server or Oracle</div>
+    </div>
+    <div class="cap-row">
+      <div class="cap-label">Optimization</div>
+      <div class="cap-desc">Fixing and speeding up APIs that are already in production</div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <h2 class="kicker">Featured project</h2>
+    <div class="project-card">
+      <span class="project-status">In progress</span>
+      <h3>Enterprise Employee Super App — Integration Layer</h3>
+      <p>Built the integration layer connecting Oracle HR, SharePoint, and a locally-hosted AI Assistant (Ollama LLM) into a single employee platform. Handled authentication across systems, data mapping between HR records and the app's data model, and reliable error handling for a production environment — working across the backend (ASP.NET Core 8), frontend (React / React Native), and AI/RAG pipeline tracks.</p>
+      <div class="tag-row">
+        <span class="tag">ASP.NET Core 8</span>
+        <span class="tag">React Native</span>
+        <span class="tag">Oracle HR API</span>
+        <span class="tag">SharePoint API</span>
+        <span class="tag">Ollama / RAG</span>
+        <span class="tag">SQL Server</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <h2 class="kicker">Experience</h2>
+
+    <div class="job">
+      <div class="job-date">Aug 2024 — Present</div>
+      <div>
+        <div class="job-title">Automation Developer</div>
+        <div class="job-org">E&</div>
+        <ul>
+          <li>Develop and maintain enterprise-level systems using .NET Core, Angular, and Microsoft SQL Server</li>
+          <li>Optimize application performance by improving database queries and backend logic</li>
+          <li>Work with cross-functional teams to deliver scalable, secure software solutions</li>
+          <li>Develop automation tools and services; automate business workflows</li>
+          <li class="highlight">Build the integration layer connecting Oracle HR, SharePoint, and a locally-hosted AI Assistant (Ollama LLM) into a unified employee platform — handling cross-system authentication, data mapping, and production error handling</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-date">2020 — 2023</div>
+      <div>
+        <div class="job-title">Freelance Web Developer</div>
+        <div class="job-org">Independent</div>
+        <ul>
+          <li>Developed small-scale websites for clients using .NET Core, Angular, and Microsoft SQL Server</li>
+          <li>Built interactive, user-friendly interfaces with Angular and Bootstrap, focused on UI/UX</li>
+          <li>Built and optimized RESTful APIs for frontend-backend integration</li>
+          <li>Worked directly with clients to scope requirements and deliver on time</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <h2 class="kicker">Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h4>Backend</h4>
+        <p>.NET Core, ASP.NET MVC, C#, PHP, Laravel, Web API, RESTful &amp; SOAP services, JWT authentication</p>
+      </div>
+      <div class="skill-group">
+        <h4>Frontend</h4>
+        <p>Angular, TypeScript, HTML5, CSS3, Bootstrap, JavaScript (ES6+), responsive design</p>
+      </div>
+      <div class="skill-group">
+        <h4>Database</h4>
+        <p>Microsoft SQL Server, Entity Framework, LINQ, stored procedures, database design</p>
+      </div>
+      <div class="skill-group">
+        <h4>Enterprise &amp; workflow</h4>
+        <p>SharePoint, Nintex workflows, K2 workflow automation, business process automation, enterprise system integration</p>
+      </div>
+      <div class="skill-group">
+        <h4>DevOps</h4>
+        <p>Git, GitHub, CI/CD</p>
+      </div>
+      <div class="skill-group">
+        <h4>Desktop</h4>
+        <p>Windows Forms, WPF</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 class="kicker">Certificates</h2>
+    <ul class="cert-list">
+      <li>Front-End Web Developer Nanodegree <span class="source">Udacity</span></li>
+      <li>Web Design <span class="source">NTI</span></li>
+      <li>Web Development using PHP, MySQL and Laravel <span class="source">NTI</span></li>
+      <li>Building Web Applications using PHP &amp; MySQL <span class="source">Mahara-Tech</span></li>
+      <li>Back-end .NET Diploma <span class="source">EraaSoft</span></li>
+      <li>C# (Basic) Certificate <span class="source">HackerRank</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-contact">
+        <div><a href="mailto:ahmedabasshalby@gmail.com">ahmedabasshalby@gmail.com</a></div>
+        <div><a href="tel:+201113003581">+20 111 300 3581</a></div>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ahmed-khaled-077418152/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/ahmedkhaledabas" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.hackerrank.com/profile/ahmedabasshalby" target="_blank" rel="noopener">HackerRank</a>
+      </div>
+    </div>
+    <div class="footer-note">Giza, Egypt</div>
+  </div>
+</footer>
+
+</body>
+</html>
